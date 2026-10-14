@@ -1,0 +1,8 @@
+109|Kana Mali|Kailash|88000.00|12000.00
+110|Himanshu Singh|Tribhuvan Singh|55000.00|45000.00
+111|Rahul Jangid|Chotu Lal Saini|33000.00|67000.00
+112|Raju Saini|Kailash Saini|44000.00|56000.00
+115|Yash Gwala|Bheru lal|77000.00|23000.00
+116|Yati Kumar Sain|Kuldeep|55000.00|45000.00
+122|Tahir Mohamad|Ibrahim Khan|36000.00|64000.00
+123|Mohd Farhan|Mohd Faruk|35000.00|65000.00

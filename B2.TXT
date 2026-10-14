@@ -1,0 +1,4 @@
+105|Imran Khan|Akbar Khan|35000.00|65000.00
+106|Imran Khan|Mohammad Yusuf|13000.00|87000.00
+107|Imran Khan|Mukesh Khan|77000.00|23000.00
+108|Mutlif Khan|Ayub Khan|39000.00|61000.00

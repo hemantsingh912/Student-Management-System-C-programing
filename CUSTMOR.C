@@ -1,0 +1,209 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <dos.h>  // For delay()
+
+struct students {
+    int sr_no;
+    char name[100];
+    char father_name[100];
+    float paid_fees;
+    float due_fees;
+} s;
+
+struct Marksheets {
+    int sr_no;
+    float marks[5];
+} m;
+
+void addStudents(int class_no);
+void showMarksheets(int class_no);
+void get_filenames(char filename[], int class_no);
+void get_marksheet_filenames(char filename[], int class_no);
+int get_next_sr_no1();
+
+ int get_next_sr_no1() {
+ FILE *fp = fopen("global_srno.txt", "r+");
+ int sr_no = 100;
+
+ if (fp == NULL)
+  {
+     fp = fopen("global_srno.txt", "w");
+     fprintf(fp, "%d", sr_no);
+     fclose(fp);
+    return sr_no;
+ } else
+  {
+	       fscanf(fp, "%d", &sr_no);
+	       sr_no++;
+	       rewind(fp);
+	       fprintf(fp, "%d", sr_no);
+	       fclose(fp);
+	       return sr_no;
+   }
+}
+
+void custmors() {
+    int i, class_no;
+    while (1) {
+	clrscr();
+	printf("                ***********************************************\n");
+	printf("               (<-----------------------MANU------------------->)\n");
+	printf("                ***********************************************\n");
+	printf("\n\n\n\n\n\n\n\n");
+	printf("                  [1]. Add Student Data\n");
+	printf("                  [2]. Show Marksheet\n");
+	printf("                  [3]. Exit\n");
+	printf("Enter your choice: ");
+	scanf("%d", &i);
+
+	if (i == 3) break;
+
+	printf("Enter a class (1-5): ");
+	scanf("%d", &class_no);
+
+	switch (i) {
+	    case 1:
+		addStudents(class_no);
+		break;
+	    case 2:
+		showMarksheets(class_no);
+		break;
+	    default:
+		printf("INVALID VALUE. TRY AGAIN.\n");
+		delay(3000);
+		break;
+	}
+	getch();
+    }
+}
+
+void get_filenames(char filename[], int class_no) {
+    sprintf(filename, "b%d.txt", class_no);
+}
+
+void get_marksheet_filenames(char filename[], int class_no) {
+    sprintf(filename, "m%d.txt", class_no);
+}
+
+
+
+void addStudents(int class_no)
+{
+
+	       FILE *fp;
+	       char filename[20];
+	       int h;
+	       clrscr();
+	       printf("                ******************************************************\n");
+	       printf("               (<-------------------Add Student Data----------------->)\n");
+	       printf("                *****************************************************\n");
+	       printf("\n\n\n\n\n\n\n\n");
+
+	       get_filenames(filename, class_no);
+	       fp = fopen(filename, "a");
+
+	       s.sr_no = get_next_sr_no1();
+	       printf("Generated SR No: %d\n", s.sr_no);
+	       printf("Enter Name: ");
+	       fflush(stdin); gets(s.name);
+	       printf("Enter Father's Name: ");
+	       gets(s.father_name);
+	       h:
+	       printf("Enter Paid Fees: ");
+	       scanf("%f", &s.paid_fees);
+	       if (s.paid_fees > 100000)
+		   {
+		     printf("Invalid fees amount!");
+
+		     goto h;
+
+		   }
+	       s.due_fees = 100000 - s.paid_fees;
+
+	       fprintf(fp, "%d|%s|%s|%.2f|%.2f\n", s.sr_no, s.name, s.father_name, s.due_fees, s.paid_fees);
+	       fclose(fp);
+	       printf("Student added successfully!\n");
+}
+
+
+
+
+
+void showMarksheets(int class_no) {
+    FILE *fp1, *fp2;
+    char filename1[20], filename2[20], line1[200], line2[200];
+    int sr, found = 0, i;
+    float total = 0, percentage;
+
+    printf("Enter SR No: ");
+    scanf("%d", &sr);
+
+    get_filenames(filename1, class_no);
+    get_marksheet_filenames(filename2, class_no);
+
+    fp1 = fopen(filename1, "r");
+    fp2 = fopen(filename2, "r");
+
+    if (!fp1 || !fp2) {
+        printf("Data not found.\n");
+        return;
+    }
+
+    while (fgets(line1, sizeof(line1), fp1)) {
+        sscanf(line1, "%d|%[^|]|%[^|]|%ld|%ld", &s.sr_no, s.name, s.father_name, &s.paid_fees, &s.due_fees);
+        if (s.sr_no == sr) {
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Student not found!\n");
+        fclose(fp1); fclose(fp2);
+        return;
+    }
+
+    found = 0;
+    while (fgets(line2, sizeof(line2), fp2)) {
+        sscanf(line2, "%d|%f|%f|%f|%f|%f", &m.sr_no, &m.marks[0], &m.marks[1], &m.marks[2], &m.marks[3], &m.marks[4]);
+        if (m.sr_no == sr) {
+            found = 1;
+            break;
+        }
+    }
+
+    fclose(fp1);
+    fclose(fp2);
+
+    if (!found) {
+        printf("Marksheet not found!\n");
+        return;
+    }
+
+    clrscr();
+    printf("\n\n\n");
+    printf("                *************************************************\n");
+    printf("               (<-------------STAR INFOTECH COLLEGE------------->)\n");
+    printf("                *************************************************\n");
+    printf("                |       Name    : %-20s          |\n", s.name);
+    printf("                |       Father  : %-20s          |\n", s.father_name);
+    printf("                |       SR No   : %-10d                    |\n", s.sr_no);
+    printf("               (<---------------Subjects Marks------------------>)\n");
+
+    for (i = 0; i < 5; i++) {
+        printf("                |        Subject %d: %.2f                       |\n", i + 1, m.marks[i]);
+        total += m.marks[i];
+    }
+
+    percentage = total / 5.0;
+    printf("                |          TOTAL  : %.2f                      |\n", total);
+    printf("                -------------------------------------------------\n");
+    printf("                |        Percentage: %.2f%%                     |\n", percentage);
+    if (percentage >= 33)
+        printf("                |        RESULT : PASS                          |\n");
+    else
+        printf("                |        RESULT : FAIL                          |\n");
+    printf("                -------------------------------------------------\n");
+}

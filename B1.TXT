@@ -1,0 +1,4 @@
+101|Aaditya Pathariya|Dulichand Pathariya|70000.00|30000.00
+102|Abdul Hanan|Mohd Rahabar|87000.00|13000.00
+103|Arsh Soni|Jitendra Soni|50000.00|50000.00
+104|Hemant nath|Shankar nath|57000.00|43000.00
